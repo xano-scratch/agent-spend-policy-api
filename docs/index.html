@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agent Spend-Policy Check API</title>
+    <meta
+      name="description"
+      content="A governed spend-policy layer an AI purchasing agent calls before it buys. One versioned rule set, the same rules for people and agents, one audit trail. Built on Xano with XanoTS."
+    />
+    <style>
+      :root {
+        --bg: #0a0a0b;
+        --panel: #141416;
+        --panel-2: #1b1b1f;
+        --border: #2a2a30;
+        --fg: #ededf0;
+        --muted: #a1a1aa;
+        --primary: #e5e7eb;
+        --accent: #7dd3fc;
+        --green: #34d399;
+        --amber: #fbbf24;
+        --red: #f87171;
+        --radius: 12px;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: radial-gradient(1200px 600px at 50% -10%, #16171d 0%, var(--bg) 55%);
+        color: var(--fg);
+        font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      code, pre {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.9em;
+      }
+      header { padding: 72px 0 28px; }
+      .eyebrow {
+        display: inline-flex; gap: 8px; align-items: center;
+        color: var(--muted); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;
+      }
+      h1 { font-size: 40px; line-height: 1.1; margin: 14px 0 10px; letter-spacing: -0.02em; }
+      .lede { font-size: 19px; color: #cfcfd6; max-width: 720px; margin: 0 0 20px; }
+      .badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 10px; }
+      .badge {
+        border: 1px solid var(--border); background: var(--panel);
+        color: var(--muted); border-radius: 999px; padding: 5px 12px; font-size: 13px;
+      }
+      .badge.play { color: var(--accent); border-color: #24506a; background: #0e2130; }
+      .meta { color: var(--muted); font-size: 14px; margin-top: 6px; font-family: ui-monospace, monospace; }
+      .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+      .btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        border-radius: 10px; padding: 10px 16px; font-weight: 600; font-size: 14px;
+        border: 1px solid var(--border); background: var(--panel); color: var(--fg);
+      }
+      .btn.primary { background: var(--primary); color: #0a0a0b; border-color: var(--primary); }
+      .btn.ghost { background: transparent; }
+      .shot {
+        margin: 34px 0 8px; border: 1px solid var(--border); border-radius: var(--radius);
+        overflow: hidden; box-shadow: 0 24px 60px -30px rgba(0,0,0,0.9);
+      }
+      .shot img { display: block; width: 100%; }
+      section { padding: 34px 0; border-top: 1px solid var(--border); }
+      h2 { font-size: 22px; margin: 0 0 14px; letter-spacing: -0.01em; }
+      p { color: #d4d4d8; }
+      .grid { display: grid; gap: 16px; grid-template-columns: repeat(3, 1fr); }
+      @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 32px; } }
+      .card {
+        border: 1px solid var(--border); background: var(--panel); border-radius: var(--radius);
+        padding: 18px;
+      }
+      .card h3 { margin: 0 0 6px; font-size: 16px; }
+      .card p { margin: 0; color: var(--muted); font-size: 14px; }
+      pre {
+        background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px;
+        padding: 16px; overflow-x: auto; color: #e5e7eb; margin: 0;
+      }
+      .prompt {
+        background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px;
+        padding: 16px; color: #cbd5e1; font-size: 14px; white-space: pre-wrap;
+      }
+      table { width: 100%; border-collapse: collapse; font-size: 14px; }
+      th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+      th { color: var(--muted); font-weight: 600; }
+      td code { color: var(--accent); }
+      .pill { border-radius: 999px; padding: 2px 8px; font-size: 12px; border: 1px solid; }
+      .pill.g { color: var(--green); border-color: #1f5c47; background: #0c231b; }
+      .pill.a { color: var(--amber); border-color: #6b5417; background: #241d09; }
+      .pill.r { color: var(--red); border-color: #6b2626; background: #260f0f; }
+      ol.rules { color: #d4d4d8; padding-left: 20px; }
+      ol.rules li { margin: 6px 0; }
+      .note { color: var(--muted); font-size: 14px; }
+      footer { padding: 40px 0 64px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--border); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <span class="eyebrow">🛡️ Xano proof artifact</span>
+        <h1>Agent Spend-Policy Check API</h1>
+        <p class="lede">
+          A governed spend-policy layer an AI purchasing agent calls before it buys. One versioned rule
+          set decides every purchase, a person and an agent get the same answer, and every check lands
+          in one audit trail.
+        </p>
+        <div class="badges">
+          <span class="badge play">Play 4 · Agent Intelligence Layer</span>
+          <span class="badge">Corporate finance operations</span>
+          <span class="badge">Built on Xano with XanoTS</span>
+        </div>
+        <div class="meta">5 tables · 7 endpoints · 1 shared rule function · 1 AI agent</div>
+        <div class="hero-actions">
+          <a class="btn primary" href="https://github.com/xano-scratch/agent-spend-policy-api">View on GitHub</a>
+          <a class="btn ghost" href="#use">Use this template</a>
+        </div>
+      </header>
+
+      <div class="shot">
+        <img src="screenshot.png" alt="The audit trail, showing each decision and the rule that fired" />
+      </div>
+
+      <section>
+        <h2>What it demonstrates</h2>
+        <p>
+          An autonomous purchasing agent should not decide on its own what the company is allowed to
+          buy. This backend puts one governed rule set between the agent and the spend. The agent reads
+          a plain-language request, and a single rule core answers one question: may this purchase
+          proceed? The same core answers whether a person or an agent asks, and it writes an audit row
+          every time.
+        </p>
+        <p>
+          The proof is control, not speed. A technical evaluator can read the rule core in one file, see
+          the roles enforced at the API layer (not row-level security), and open the audit trail to
+          check that every refusal names the exact rule that fired.
+        </p>
+      </section>
+
+      <section>
+        <h2>How a decision is made</h2>
+        <p>The rule core loads the active policy for the category and the vendor status, then applies the rules in order. The first match wins:</p>
+        <ol class="rules">
+          <li>No active policy for the category, <span class="pill r">refused</span></li>
+          <li>Vendor is not on the approved list, <span class="pill r">refused</span></li>
+          <li>Vendor is blocked, <span class="pill r">refused</span></li>
+          <li>Amount over the per-transaction limit, <span class="pill r">refused</span></li>
+          <li>Amount over the approval threshold, <span class="pill a">needs approval</span></li>
+          <li>Otherwise, <span class="pill g">allowed</span></li>
+        </ol>
+        <p class="note">
+          Roles are enforced per endpoint. A purchaser can commit an allowed request but is refused when
+          it needs approval. An approver can commit that one. Every attempt, allowed or refused, is
+          logged.
+        </p>
+      </section>
+
+      <section id="use">
+        <h2>Use this template</h2>
+        <p>Paste this into your AI coding agent to spin up your own copy:</p>
+        <div class="prompt">Clone https://github.com/xano-scratch/agent-spend-policy-api and set it up as a XanoTS project. Run npm install, then npx xanots login, then npm run xano:deploy to deploy the backend and frontend to a live Xano environment. Open the printed URL and POST to /api:spend/seed to load the sample data. Then help me adapt the spend rules and vendors to my own categories.</div>
+        <p style="margin-top:16px">Or clone it yourself:</p>
+        <pre>git clone https://github.com/xano-scratch/agent-spend-policy-api
+cd agent-spend-policy-api
+npm install
+npx xanots login
+npm run xano:deploy</pre>
+      </section>
+
+      <section>
+        <h2>API surface</h2>
+        <table>
+          <thead>
+            <tr><th>Method</th><th>Path</th><th>Auth</th><th>What it does</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>POST</td><td><code>/api:spend/login</code></td><td>public</td><td>Sign in as a seeded agent, return a bearer token.</td></tr>
+            <tr><td>POST</td><td><code>/api:spend/evaluate</code></td><td>agent</td><td>Run the rule core, record the request, write an audit row.</td></tr>
+            <tr><td>POST</td><td><code>/api:spend/agent-check</code></td><td>agent</td><td>The agent reads a plain-language request; the rule core decides.</td></tr>
+            <tr><td>POST</td><td><code>/api:spend/commit</code></td><td>agent</td><td>Commit a decision, behind a role guard.</td></tr>
+            <tr><td>GET</td><td><code>/api:spend/actions</code></td><td>agent</td><td>The audit trail, newest first, filterable by decision.</td></tr>
+            <tr><td>GET</td><td><code>/api:spend/policies</code></td><td>public</td><td>The active policy per category and the vendor list.</td></tr>
+            <tr><td>POST</td><td><code>/api:spend/seed</code></td><td>public</td><td>Reset and load the sample data.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>The three screens</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Ask the agent</h3>
+            <p>Type a purchase in plain words. The agent reads it and the rule core returns the governed decision with the rule that fired.</p>
+          </div>
+          <div class="card">
+            <h3>Policy and vendors</h3>
+            <p>The active spend policy per category and the vendor allow and block list, so a reviewer can read the rules a decision came from.</p>
+          </div>
+          <div class="card">
+            <h3>Audit trail</h3>
+            <p>Every check, allow, and refusal, newest first, with the decision, the firing rule, and the policy version. The governance payoff.</p>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <p>
+          Live demo links are ephemeral and expire, so this page does not embed one. Deploy your own in
+          about a minute with the steps above; each deploy prints fresh links. This is an experimental
+          proof artifact that runs on sample data, not a live customer system.
+        </p>
+        <p>Built on <a href="https://www.xano.com">Xano</a> with <a href="https://www.npmjs.com/package/@xanots/sdk">XanoTS</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

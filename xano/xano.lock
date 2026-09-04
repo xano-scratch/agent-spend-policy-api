@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "objects": {
+    "app:spend": {
+      "guid": "911f79f370677bac1e2e843b6da61aba",
+      "canonical": "spend",
+      "canonical_source": "code"
+    },
+    "dbo:agent_actions": {
+      "guid": "27c2489d4eb0510d91c02d8661bee92d"
+    },
+    "dbo:agents": {
+      "guid": "683d8434f0dd752066da3931cea8c741"
+    },
+    "dbo:spend_policies": {
+      "guid": "db58854658c722490862048502c7e0f5"
+    },
+    "dbo:spend_requests": {
+      "guid": "46f58df1742a8ef0000cc650577eecd1"
+    },
+    "dbo:vendors": {
+      "guid": "579b69a3a85e27a4a53bed1421c5776a"
+    },
+    "function:classify_spend": {
+      "guid": "3acab61fd9e27c959887c250493ed353"
+    },
+    "query:spend|GET|actions": {
+      "guid": "e37285da65eca427164d44db9c9b2260"
+    },
+    "query:spend|GET|policies": {
+      "guid": "c07ee1c95d6ca7433c78190f007c3e6c"
+    },
+    "query:spend|POST|agent-check": {
+      "guid": "0c65541b9e38cb69aa3434d0a613ed03"
+    },
+    "query:spend|POST|commit": {
+      "guid": "d69f3d0b40150d37550ea7785fe56d3f"
+    },
+    "query:spend|POST|evaluate": {
+      "guid": "ebf07115eeb2ba967e219a466131cedd"
+    },
+    "query:spend|POST|login": {
+      "guid": "64af452360868edff57038b6ff9e0ddf"
+    },
+    "query:spend|POST|seed": {
+      "guid": "07669aca3aaf729e7ec4b0c669d388c3"
+    },
+    "toolset:spend_policy_agent": {
+      "guid": "0f27be01f44d3e349aa085dd8e770b86",
+      "canonical": "qGUdX5b6",
+      "canonical_source": "minted"
+    }
+  }
+}
